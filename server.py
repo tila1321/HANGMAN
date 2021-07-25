@@ -4,6 +4,8 @@ import sys
 import time
 import _thread
 
+users = {}
+
 WORDARRAY = ['blue','black','yellow','pink','grey','green','brown','maroon','purple','gold']
 
 connectedCount = 0
@@ -14,43 +16,37 @@ playerTurns = 7
 hangIndex = 0
 playerIndex = 0
 
+
 def SendToAllPlayers(message):
     for user in users.values():
         if user is not None and user[1] is not None:
             user[1].send(bytes(message,'utf-8'))
 
-def server_program():
+def serverProgram():
 
-    SS = socket.socket()
+    server = socket.socket()
     ip = '192.168.56.110'
     port = 0
 
+    print("\n[ Available port is 1024 to 65535 ]")
     while port < 1024 or port > 65535:
         try:
            port = int(input("\nEnter the port of the host: "))
         except ValueError:
            pass
 
-    SS.bind((ip, port))
-    SS.listen(10)
+    server.bind((ip, port))
+    server.listen(10)
+
     global randomWord
     randomWord = random.choice(WORDARRAY)
     print("The word to guess is:" +randomWord)
+
     while True:
-            c, addr = SS.accept()
-            print("connection from:" +str(addr))
-
-    c.send(b'Joining...')
-    buffer = c.recv(1024)
-    print(buffer)
-
-    c.close()
-
-    global randomWord
-    randomWord = random.choice(WORDARRAY)
-    print("The Word is: " +randomWord)
+            
 
 def executeGame(guess,username1):
+   
     global guesses
     global randomWord
     global playerTurns
@@ -98,11 +94,12 @@ def executeGame(guess,username1):
 
     print(result)
 def nextUser(index):
-    i = 0
+   
+    k = 0
     for user in users:
-        if i == index:
+        if k == index:
             users[user][1].send(b"Your Turn")
-        i += 1
+        k += 1
 def Conn_Thread(conn,address):
     turn = 0
     username1 = None
@@ -111,8 +108,8 @@ def Conn_Thread(conn,address):
 
         data = conn.recv(1024)
         if not data:
-
             break
+
         strData = str(data, 'utf-8')
         if turn == 0:
             splited = strData.split('|',1)
@@ -200,7 +197,7 @@ def Old_User(username,password,conn,address):
 
 
 if __name__ == "__main__":
-    server_program()
+    serverProgram()
 
 
 
