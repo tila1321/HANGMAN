@@ -22,19 +22,20 @@ def SendToAllPlayers(message):
 def server_program():
 
     SS = socket.socket()
-    host = '192.168.56.110'
+    ip = '192.168.56.110'
     port = 0
 
-    print("\n[[ Available port is 1024 to 65535 ]]")
     while port < 1024 or port > 65535:
         try:
-           port = int(input("\nEnter a port: "))
+           port = int(input("\nEnter the port of the host: "))
         except ValueError:
            pass
 
-    SS.bind((host, port))
+    SS.bind((ip, port))
     SS.listen(10)
-
+    global randomWord
+    randomWord = random.choice(WORDARRAY)
+    print("The word to guess is:" +randomWord)
     while True:
             c, addr = SS.accept()
             print("connection from:" +str(addr))
