@@ -75,6 +75,18 @@ def ClientProg():
 
     CS.connect((host, port))
 
+    print("\n")
+    print("\t\t--------------------------------------------------------")
+    print("\t\t（＾・ω・＾✿） Hello! Welcome to Hangman! （＾・ω・＾✿）")
+    print("\t\t--------------------------------------------------------")
+    print("\t\t-------------------------------------------")
+    print("\t\t The goal is to guess as much as you can ")
+    print("\t\t-------------------------------------------")
+    print("\n")
+    print("/t************************")
+    print("/t The category is COLOUR ")
+    print("/t************************")
+
     login = input("Already sign up to the game (y or n) ?:")
 
     if login == 'y' or login == 'Y':
