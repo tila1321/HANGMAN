@@ -2,6 +2,7 @@ import socket
 import random
 import sys
 import time
+import _thread
 
 WORDARRAY = ['blue','black','yellow','pink','grey','green','brown','maroon','purple','gold']
 
