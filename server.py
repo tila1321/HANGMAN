@@ -157,23 +157,22 @@ def Conn_Thread(conn,address):
 
 
 def New_User(username, conn,address):
-    Create_Login = username
-    if Create_Login in users:
+    CreateLogin = username
+    if CreateLogin in users:
         conn.send(bytes("Userneame is already exists. Please try another username:", 'utf-8'))
         return 0
     else:
-        conn.send(bytes("New user password",'utf-8'))
+        conn.send(bytes("New user password:",'utf-8'))
         password = conn.recv(1024)
-        users[Create_Login] = [str(password,'utf-8'),conn]
+        users[CreateLogin] = [str(password,'utf-8'),conn]
 
         global connectedCount
         connectedCount += 1
         if connectedCount == 1:
             conn.send(b'firstUser')
         else:
-            conn.send(bytes("Login Successfull!", 'utf-8'))
+            conn.send(bytes("Login Successfull! Enjoy game!", 'utf-8'))
         return 1
-
 
 
 def Old_User(username,password,conn,address):
@@ -188,20 +187,17 @@ def Old_User(username,password,conn,address):
             if connectedCount == 1:
                 conn.send(b'firstUser')
             else:
-                conn.send(bytes("Login Successfull!", 'utf-8'))
+                conn.send(bytes("Login Successfull! Enjoy game!", 'utf-8'))
             return 1
         else:
-            conn.send(bytes("User doesn't exist or wrong password!",'utf-8'))
+            conn.send(bytes("User does not exist or wrong password!",'utf-8'))
             return 0
     else:
-        conn.send(bytes("User doesn't exist or wrong password!",'utf-8'))
+        conn.send(bytes("User does not exist or wrong password!",'utf-8'))
         return 0
 
 
 if __name__ == "__main__":
     serverProgram()
 
-
-
-O
 
