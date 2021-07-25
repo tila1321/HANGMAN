@@ -82,7 +82,7 @@ def executeGame(guess,username1):
             failed += 1
 
     if failed == 0:
-        SendToAllPlayers(str(username1) + " win! Congratulations!")
+        SendToAllPlayers(str(username1) + " win the game! Congratulations!")
         time.sleep(0.05)
         SendToAllPlayers("Exit game..")
         time.sleep(0.05)
@@ -100,7 +100,7 @@ def nextUser(index):
     k = 0
     for user in users:
         if k == index:
-            users[user][1].send(b"Your Turn")
+            users[user][1].send(b"Your Turn to guess the word")
         k += 1
 def Conn_Thread(conn,address):
     turn = 0
@@ -202,4 +202,6 @@ if __name__ == "__main__":
     serverProgram()
 
 
+
+O
 
