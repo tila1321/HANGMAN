@@ -15,15 +15,29 @@ playerTurns = 7
 hangIndex = 0
 playerIndex = 0
 
+def SendToAllPlayers(message):
+    for user in users.values():
+        if user is not None and user[1] is not None:
+            user[1].send(bytes(message,'utf-8'))
+
 def server_program():
+
+    SS = socket.socket()
     host = '192.168.56.110'
-    port = 8082
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((host, port))
-    s.listen(10)
+    port = 0
+
+    print("\n[[ Available port is 1024 to 65535 ]]")
+    while port < 1024 or port > 65535:
+        try:
+           port = int(input("\nEnter a port: "))
+        except ValueError:
+           pass
+
+    SS.bind((host, port))
+    SS.listen(10)
 
     while True:
-            c, addr = s.accept()
+            c, addr = SS.accept()
             print("connection from:" +str(addr))
 
     c.send(b'Joining...')
@@ -35,12 +49,13 @@ def server_program():
     global randomWord
     randomWord = random.choice(WORDARRAY)
     print("The Word is: " +randomWord)
+
 def executeGame(guess,username1):
     global guesses
     global randomWord
     global playerTurns
     global hangIndex
-    # counts the number of times a user fails
+
     failed = 0
     result = ""
 
@@ -93,10 +108,10 @@ def Conn_Thread(conn,address):
     username1 = None
     global playerIndex
     while True:
-        # receive data stream. it won't accept data packet greater than 1024 bytes
+
         data = conn.recv(1024)
         if not data:
-            # if data is not received break
+
             break
         strData = str(data, 'utf-8')
         if turn == 0:
@@ -138,7 +153,7 @@ def Conn_Thread(conn,address):
 
         print("from connected user: " + str(data,'utf-8'))
 
-    conn.close()  # close the connection
+    conn.close()
 
 
 
