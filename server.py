@@ -43,7 +43,9 @@ def serverProgram():
     print("The word to guess is:" +randomWord)
 
     while True:
-            
+        conn, address = server.accept()
+        _thread.start_new_thread(Conn_Thread,(conn,address))
+        print("Received connection from: " + str(address))            
 
 def executeGame(guess,username1):
    
