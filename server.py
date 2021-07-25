@@ -3,9 +3,7 @@ import random
 import sys
 import time
 
-WORDARRAY = ['gaming', 'computer', 'science', 'programming',
-             'python', 'javascript', 'player', 'technical',
-             'dude', 'espresso', 'communication', 'geeks']
+WORDARRAY = ['blue','black','yellow','pink','grey','green','brown','maroon','purple','gold']
 
 connectedCount = 0
 size = 0
