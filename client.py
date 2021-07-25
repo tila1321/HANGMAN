@@ -61,13 +61,21 @@ HMAN = ['''
 
 def ClientProg():
 
-    host = '192.168.56.110'
-    port = 8082
-
     CS = socket.socket()
+    host = '192.168.56.110'
+    port = 0
+
+    print("\n[[ Available port is 1024 to 65535 ]]")
+
+    while port < 1024 or port > 65535:
+        try:
+           port = int(input("\nEnter a port: "))
+        except ValueError:
+           pass
+
     CS.connect((host, port))
 
-    login = input("Already logged in to the game (y or n) ?:")
+    login = input("Already sign up to the game (y or n) ?:")
 
     if login == 'y' or login == 'Y':
 
