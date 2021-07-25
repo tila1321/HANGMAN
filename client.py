@@ -1,6 +1,7 @@
 import socket
+import random
 
-HANGMANPICS = ['''
+HMAN = ['''
     +-----+
     |     |
     |
@@ -58,76 +59,83 @@ HANGMANPICS = ['''
     |     DEAD
     ======= ''']
 
-def client_program():
+def ClientProg():
 
     host = '192.168.56.110'
     port = 8082
 
-    clientsocket = socket.socket()
-    clientsocket.connect((host, port))
+    CS = socket.socket()
+    CS.connect((host, port))
 
     login = input("Already logged in to the game (y or n) ?:")
+
     if login == 'y' or login == 'Y':
-        Username = input(" username: ")  # take input
-        password = input(" password: ")  # take input
+
+        Username = input(" username: ")
+        password = input(" password: ")
         sendinfString = Username + "|" + password
         while Username.lower().strip() != 'bye' and password.lower().strip() != 'bye':
 
-            clientsocket.send(bytes(sendinfString,'utf-8'))
+            CS.send(bytes(sendinfString,'utf-8'))
 
-            data = clientsocket.recv(1024)
-            print('Received from server: ' + str(data, 'utf-8'))  # show in terminal
-            if str(data, 'utf-8') == str("Login Successfull!"):
+            Data = CS.recv(1024)
+            print('Received from server: ' + str(Data, 'utf-8'))
+            if str(Data, 'utf-8') == str("Login Successfull!"):
                 pass
             else:
-                clientsocket.close()
-                client_program()
+                CS.close()
+                ClientProg()
+
     elif login == 'n' or login == 'N':
-        username = input(" username: ")   #take input
-        exist(username,clientsocket)
+        Username = input(" username: ")
+        exist(Username,CS)
     else:
         pass
-def exist(username,clientsocket):
 
-    while username.lower().strip() != 'bye':
-        clientsocket.send(bytes(username,'utf-8'))  # send message
-        data = clientsocket.recv(1024)  # receive response
-        print('Received from server: ' + str(data,'utf-8'))  # show in terminal
-        if str(data,'utf-8') == str("Already exists,please try another username:"):
-            username = input(" username: ")
-            exist(username,clientsocket)
+def exist(Username,CS):
+
+    while Username.lower().strip() != 'bye':
+        CS.send(bytes(Username,'utf-8'))
+        Data = CS.recv(1024)
+        print('Received from server: ' + str(Data,'utf-8'))
+        if str(Data,'utf-8') == str("Already exists,please try another username:"):
+            Username = input(" Username: ")
+            exist(Username,CS)
         else:
-            password = input(" password: ")  # again take input
-            clientsocket.send(bytes(password, 'utf-8'))  # send message
-            while password.lower().strip() != 'bye':
-                data = clientsocket.recv(1024)  # receive response
-                strData = str(data, 'utf-8')
+            Password = input(" password: ")
+            CS.send(bytes(Password, 'utf-8'))
+            while Password.lower().strip() != 'bye':
+                Data = CS.recv(1024)
+                strData = str(Data, 'utf-8')
 
-                if str(data,'utf-8') == str("firstUser"):
-                    size = input("How many players you get?:")
-                    clientsocket.send(bytes(size,'utf-8'))
-                elif str(data, 'utf-8') == str("Login Successfull!"):
+                if str(Data,'utf-8') == str("firstUser"):
+                    size = input("\nHow many players will join?:")
+                    CS.send(bytes(size,'utf-8'))
+                elif str(Data, 'utf-8') == str("Login Successfull!"):
                     print("Logged In!")
-                    clientsocket.send(bytes("OK", 'utf-8'))
+                    CS.send(bytes("OK", 'utf-8'))
                 elif strData.isdigit():
-                    print(HANGMANPICS[int(strData)])
-                elif str(data,'utf-8') == str("Your Turn"):
-                    guess =input("its your turn Enter your guess:")
-                    clientsocket.send(bytes(guess,'utf-8'))
+                    print(HMAN[int(strData)])
+                elif str(data,'utf-8') == str("It is your Turn"):
+                    Guess =input("/nPlease enter your guess:")
+                    CS.send(bytes(Guess,'utf-8'))
                 else:
-                    print('Received from server: ' + str(data, 'utf-8'))  # show in terminal
+                    print('Received from server: ' + str(data, 'utf-8'))
 
     while password.lower().strip() != 'bye':
-        clientsocket.send(bytes(password,'utf-8'))  # send message
-        data = clientsocket.recv(1024)  # receive response
-        print('Received from server: ' + str(data, 'utf-8'))
-        if str(data, 'utf-8') == str("Login Successfull!"):
+
+        CS.send(bytes(password,'utf-8'))
+        Data = CS.recv(1024)
+
+        print('Received from server: ' + str(Data, 'utf-8'))
+        if str(Data, 'utf-8') == str("Login Successfull!"):
             pass
         else:
            pass
 
-    clientsocket.close()  # close the connection
+    CS.close()
 
 
 if __name__ == "__main__":
-    client_program()
+
+      ClientProg()
