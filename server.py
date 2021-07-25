@@ -95,6 +95,7 @@ def executeGame(guess,username1):
         SendToAllPlayers("Remaining:" + str(playerTurns))
 
     print(result)
+
 def nextUser(index):
    
     k = 0
@@ -119,19 +120,19 @@ def Conn_Thread(conn,address):
             if len(splited) > 1:
                 password =  splited[1]
                 turn = Old_User(username1, password, conn, address)
-                print("oldUserReturn Turn: " + str(turn))
+                print("Old User Return Turn: " + str(turn))
 
             else:
                turn = New_User(username1,conn,address)
-               print(" newUser Turn: " + str(turn))
+               print(" New User Turn: " + str(turn))
         elif turn == 1 and strData.isdigit() is True:
             global size
             size = int(strData)
-            conn.send(bytes("Waiting for other players...", 'utf-8'))
+            conn.send(bytes("Waiting for other players to enter the game...", 'utf-8'))
             turn += 1
         elif turn == 1 :
             if len(users) == size:
-                SendToAllPlayers("Game is started.First player is playing...")
+                SendToAllPlayers("Game start. First player is playing...")
                 time.sleep(0.05)
                 SendToAllPlayers("Total guess rights: " + str(playerTurns))
                 time.sleep(0.05)
@@ -150,16 +151,15 @@ def Conn_Thread(conn,address):
         else:
             pass
 
-        print("from connected user: " + str(data,'utf-8'))
+        print("From connected user: " + str(data,'utf-8'))
 
     conn.close()
-
 
 
 def New_User(username, conn,address):
     Create_Login = username
     if Create_Login in users:
-        conn.send(bytes("Already exists,please try another username:", 'utf-8'))
+        conn.send(bytes("Userneame is already exists. Please try another username:", 'utf-8'))
         return 0
     else:
         conn.send(bytes("New user password",'utf-8'))
