@@ -1,12 +1,13 @@
 import socket
 import random
 import sys
-import time
 import _thread
+import time
+
 
 users = {}
 
-WORDARRAY = ['blue','black','yellow','pink','grey','green','brown','maroon','purple','gold']
+WORDARRAY = ['blue','black','yellow','pink','grey','green','brown','maroon','purple','gold', 'lilac', 'baby blue', 'orange' ]
 
 connectedCount = 0
 size = 0
@@ -17,7 +18,9 @@ hangIndex = 0
 playerIndex = 0
 
 
+
 def SendToAllPlayers(message):
+
     for user in users.values():
         if user is not None and user[1] is not None:
             user[1].send(bytes(message,'utf-8'))
@@ -28,27 +31,28 @@ def serverProgram():
     ip = '192.168.56.110'
     port = 0
 
-    print("\n[ Available port is 1024 to 65535 ]")
     while port < 1024 or port > 65535:
         try:
-           port = int(input("\nEnter the port of the host: "))
+          port = int(input("\nEnter the port of the host: "))
         except ValueError:
-           pass
+          pass
 
-    server.bind((ip, port))
+
+    server.bind((ip,port))
+
     server.listen(10)
 
     global randomWord
     randomWord = random.choice(WORDARRAY)
-    print("The word to guess is:" +randomWord)
-
+    print("/n***The Word is: ***" +randomWord)
     while True:
+
         conn, address = server.accept()
         _thread.start_new_thread(Conn_Thread,(conn,address))
-        print("Received connection from: " + str(address))            
+        print("\n [[ Received connection from: ]]" + str(address))
 
 def executeGame(guess,username1):
-   
+
     global guesses
     global randomWord
     global playerTurns
@@ -61,13 +65,13 @@ def executeGame(guess,username1):
         hangIndex = hangIndex + 1
         playerTurns -= 1
         if playerTurns == 0:
-            SendToAllPlayers("Game Over...")
+            SendToAllPlayers("/nGame Over! Try again!")
             sys.exit()
     elif len(guess) > 1 and guess != randomWord:
         hangIndex = hangIndex + 1
         playerTurns -= 1
         if playerTurns == 0:
-            SendToAllPlayers("Game Over...")
+            SendToAllPlayers("/nGame Over! Try again!")
             sys.exit()
     else:
         guesses += guess
@@ -82,9 +86,9 @@ def executeGame(guess,username1):
             failed += 1
 
     if failed == 0:
-        SendToAllPlayers(str(username1) + " win the game! Congratulations!")
+        SendToAllPlayers(str(username1) + " win! Congratulations!")
         time.sleep(0.05)
-        SendToAllPlayers("Exit game..")
+        SendToAllPlayers("/nExit game.....")
         time.sleep(0.05)
         sys.exit()
     else:
@@ -97,13 +101,15 @@ def executeGame(guess,username1):
     print(result)
 
 def nextUser(index):
-   
+
     k = 0
     for user in users:
         if k == index:
-            users[user][1].send(b"Your Turn to guess the word")
+            users[user][1].send(b"/nYour Turn...")
         k += 1
+
 def Conn_Thread(conn,address):
+
     turn = 0
     username1 = None
     global playerIndex
@@ -120,11 +126,11 @@ def Conn_Thread(conn,address):
             if len(splited) > 1:
                 password =  splited[1]
                 turn = Old_User(username1, password, conn, address)
-                print("Old User Return Turn: " + str(turn))
+                print("oldUserReturn Turn: " + str(turn))
 
             else:
                turn = New_User(username1,conn,address)
-               print(" New User Turn: " + str(turn))
+               print(" newUser Turn: " + str(turn))
         elif turn == 1 and strData.isdigit() is True:
             global size
             size = int(strData)
@@ -132,9 +138,9 @@ def Conn_Thread(conn,address):
             turn += 1
         elif turn == 1 :
             if len(users) == size:
-                SendToAllPlayers("Game start. First player is playing...")
+                SendToAllPlayers("/tGame is started.First player is playing...")
                 time.sleep(0.05)
-                SendToAllPlayers("Total guess rights: " + str(playerTurns))
+                SendToAllPlayers("/tTotal guess rights: " + str(playerTurns))
                 time.sleep(0.05)
                 SendToAllPlayers("0")
                 nextUser(0)
@@ -151,31 +157,36 @@ def Conn_Thread(conn,address):
         else:
             pass
 
-        print("From connected user: " + str(data,'utf-8'))
+        print("/n [[ from connected user: ]]" + str(data,'utf-8'))
 
     conn.close()
 
 
+
 def New_User(username, conn,address):
-    CreateLogin = username
-    if CreateLogin in users:
-        conn.send(bytes("Userneame is already exists. Please try another username:", 'utf-8'))
+
+    Create_Login = username
+
+    if Create_Login in users:
+        conn.send(bytes("/nAlready exists,please try another username:", 'utf-8'))
         return 0
     else:
-        conn.send(bytes("New user password:",'utf-8'))
+        conn.send(bytes("New user password",'utf-8'))
         password = conn.recv(1024)
-        users[CreateLogin] = [str(password,'utf-8'),conn]
+        users[Create_Login] = [str(password,'utf-8'),conn]
 
         global connectedCount
         connectedCount += 1
         if connectedCount == 1:
             conn.send(b'firstUser')
         else:
-            conn.send(bytes("Login Successfull! Enjoy game!", 'utf-8'))
+            conn.send(bytes("Login Successfull!", 'utf-8'))
         return 1
 
 
+
 def Old_User(username,password,conn,address):
+
     login = username
 
     if login in users:
@@ -187,17 +198,16 @@ def Old_User(username,password,conn,address):
             if connectedCount == 1:
                 conn.send(b'firstUser')
             else:
-                conn.send(bytes("Login Successfull! Enjoy game!", 'utf-8'))
+                conn.send(bytes("Login Successfull!", 'utf-8'))
             return 1
         else:
-            conn.send(bytes("User does not exist or wrong password!",'utf-8'))
+            conn.send(bytes("User doesn't exist or wrong password!",'utf-8'))
             return 0
     else:
-        conn.send(bytes("User does not exist or wrong password!",'utf-8'))
+        conn.send(bytes("User doesn't exist or wrong password!",'utf-8'))
         return 0
 
 
 if __name__ == "__main__":
+
     serverProgram()
-
-
