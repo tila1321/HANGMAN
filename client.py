@@ -1,7 +1,7 @@
 import socket
 import random
 
-HMAN = ['''
+HMANPICS = ['''
     +-----+
     |     |
     |
@@ -33,29 +33,29 @@ HMAN = ['''
     +-----+
     |     |
     |     0
-    |    /|\ 
+    |    /|\
     |
     |
     ======= ''','''
     +-----+
     |     |
     |     0
-    |    /|\ 
-    |    / 
+    |    /|\
+    |    /
     |
-    ======= ''','''
+ ======= ''','''
     +-----+
     |     |
     |     0
-    |    /|\ 
-    |    / \ 
+    |    /|\
+    |    / \
     |
     ======= ''' ,'''
     +-----+
     |     |
     |     0
-    |    /|\ 
-    |    / \ 
+    |    /|\
+    |    / \
     |     DEAD
     ======= ''']
 
@@ -73,6 +73,7 @@ def clientProg():
         except ValueError:
            pass
 
+
     CS.connect((host, port))
 
     print("\n")
@@ -83,16 +84,16 @@ def clientProg():
     print("\t\t The goal is to guess as much as you can ")
     print("\t\t-------------------------------------------")
     print("\n")
-    print("/t************************")
-    print("/t The category is COLOUR ")
-    print("/t************************")
+    print("************************")
+    print(" The category is COLOUR ")
+    print("************************")
 
-    login = input("Already sign up to the game (y or n) ?:")
+    login = input("\nAlready sign up to the game (y or n) ?:")
 
     if login == 'y' or login == 'Y':
 
-        Username = input(" username: ")
-        password = input(" password: ")
+        Username = input(" \nUsername: ")
+        password = input(" Password: ")
         sendinfString = Username + "|" + password
         while Username.lower().strip() != 'bye' and password.lower().strip() != 'bye':
 
@@ -100,6 +101,7 @@ def clientProg():
 
             data = CS.recv(1024)
             print('Received from server: ' + str(data, 'utf-8'))
+
             if str(data, 'utf-8') == str("Login Successfull!"):
                 pass
             else:
@@ -107,7 +109,7 @@ def clientProg():
                 clientProg()
 
     elif login == 'n' or login == 'N':
-        Username = input(" username: ")
+        Username = input(" Username: ")
         exist(Username,CS)
     else:
         pass
@@ -118,36 +120,34 @@ def exist(Username,CS):
         CS.send(bytes(Username,'utf-8'))
         data = CS.recv(1024)
         print('Received from server: ' + str(data,'utf-8'))
-        if str(data,'utf-8') == str("Already exists,please try another username:"):
+        if str(data,'utf-8') == str("/nAlready exists, enter another username:"):
             Username = input(" Username: ")
             exist(Username,CS)
         else:
-            Password = input(" password: ")
+            Password = input(" Password: ")
             CS.send(bytes(Password, 'utf-8'))
             while Password.lower().strip() != 'bye':
                 data = CS.recv(1024)
                 strData = str(data, 'utf-8')
 
                 if str(data,'utf-8') == str("firstUser"):
-                    size = input("\nHow many players will join?:")
+                    size = input("/nHow many player wants to play?:")
                     CS.send(bytes(size,'utf-8'))
                 elif str(data, 'utf-8') == str("Login Successfull!"):
                     print("Logged In!")
                     CS.send(bytes("OK", 'utf-8'))
                 elif strData.isdigit():
-                    print(HMAN[int(strData)])
-                elif str(data,'utf-8') == str("It is your Turn"):
-                    Guess = input("/nPlease enter your guess:")
-                    CS.send(bytes(Guess,'utf-8'))
+                    print(HMANPICS[int(strData)])
+                elif str(data,'utf-8') == str("/nYour Turn"):
+                    guess =input("/nYour turn! Enter your guess:")
+                    CS.send(bytes(guess,'utf-8'))
                 else:
-                    print('Received from server: ' + str(data, 'utf-8'))
+                    print('/nReceived from server: ' + str(data, 'utf-8'))
 
-    while password.lower().strip() != 'bye':
-
-        CS.send(bytes(password,'utf-8'))
+    while Password.lower().strip() != 'bye':
+        CS.send(bytes(Password,'utf-8'))
         data = CS.recv(1024)
-
-        print('Received from server: ' + str(data, 'utf-8'))
+        print('/nReceived from server: ' + str(data, 'utf-8'))
         if str(data, 'utf-8') == str("Login Successfull!"):
             pass
         else:
@@ -158,5 +158,4 @@ def exist(Username,CS):
 
 if __name__ == "__main__":
 
-      clientProg()
-
+    clientProg()
