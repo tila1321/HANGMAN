@@ -62,7 +62,7 @@ HMAN = ['''
 def ClientProg():
 
     CS = socket.socket()
-    host = '192.168.56.105'
+    host = '192.168.56.110'
     port = 0
 
     print("\n[[ Available port is 1024 to 65535 ]]")
