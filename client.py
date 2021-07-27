@@ -62,7 +62,7 @@ HMAN = ['''
 def ClientProg():
 
     CS = socket.socket()
-    host = '192.168.56.110'
+    host = '192.168.56.105'
     port = 0
 
     print("\n[[ Available port is 1024 to 65535 ]]")
@@ -136,11 +136,11 @@ def exist(Username,CS):
                     CS.send(bytes("OK", 'utf-8'))
                 elif strData.isdigit():
                     print(HMAN[int(strData)])
-                elif str(data,'utf-8') == str("It is your Turn"):
+                elif str(Data,'utf-8') == str("It is your Turn"):
                     Guess =input("/nPlease enter your guess:")
                     CS.send(bytes(Guess,'utf-8'))
                 else:
-                    print('Received from server: ' + str(data, 'utf-8'))
+                    print('Received from server: ' + str(Data, 'utf-8'))
 
     while password.lower().strip() != 'bye':
 
@@ -159,3 +159,4 @@ def exist(Username,CS):
 if __name__ == "__main__":
 
       ClientProg()
+
